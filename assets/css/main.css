@@ -414,6 +414,30 @@ ul, ol { padding-left: 1.2em; }
 .footer__bottom p { margin: 0; }
 @media (min-width: 768px) { .footer__bottom { padding-bottom: 28px; } }
 
+.footer__legal a { color: var(--muted); }
+.footer__legal a:hover { color: var(--accent); }
+.footer__note { flex-basis: 100%; font-size: 0.8rem; opacity: 0.85; }
+
+/* ---------- Imágenes de referencia (IA) ---------- */
+.svc__img, .media-frame { position: relative; }
+.ai-badge {
+  position: absolute; left: 10px; top: 10px; z-index: 2;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.02em;
+  color: #fff; background: rgba(3, 8, 24, 0.72); border: 1px solid var(--line-2);
+  backdrop-filter: blur(6px);
+}
+
+/* ---------- Términos y condiciones ---------- */
+.toc { margin-bottom: 36px; padding: 20px 24px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
+.toc ol { margin: 0; padding-left: 1.3em; columns: 2 220px; column-gap: 32px; }
+.toc li { padding: 4px 0; break-inside: avoid; }
+.toc a { color: var(--text); text-decoration: none; }
+.toc a:hover { color: var(--accent); }
+.legal section { padding-top: 8px; }
+.legal h2 { margin-top: 1.6em; font-size: clamp(1.3rem, 2.6vw, 1.6rem); }
+.legal h3 { margin-top: 1.2em; font-size: 1.1rem; }
+
 /* ---------- Botones flotantes ---------- */
 .call-fab {
   position: fixed; left: 16px; bottom: 18px; z-index: 40;

@@ -1,21 +1,88 @@
 /**
  * Plomeros Medellín — interacciones del sitio.
- * Todo el contenido está en el HTML; este archivo solo añade:
- * botón flotante de WhatsApp, menú móvil, fondo de estrellas,
- * animaciones de aparición, paneles, mapa diferido y visor de fotos.
+ * Todo el contenido está en el HTML; este archivo añade:
+ * datos de config.js, botón flotante de WhatsApp con conversión de Google Ads,
+ * menú móvil, fondo de estrellas, animaciones, paneles, mapa diferido y visor de fotos.
  */
 (function () {
     "use strict";
 
-    var WHATSAPP = "573022274397";
-    var WA_MSG = "Hola, quiero más información sobre sus servicios de plomería";
+    var CFG = window.SITE_CONFIG || {};
+    var WA = CFG.whatsapp || { completo: "573022274397", msgInfo: "Hola, quiero más información" };
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ── Datos de config.js → HTML ──────────────────────────────── */
+    function get(path) {
+        return path.split(".").reduce(function (o, k) { return o && o[k]; }, CFG);
+    }
+    function fmtPhone(n) {
+        return String(n).replace(/^(\d{3})(\d{3})(\d{4})$/, "$1 $2 $3");
+    }
+    function applyConfig() {
+        if (!window.SITE_CONFIG) return;
+        document.querySelectorAll("[data-cfg-text]").forEach(function (el) {
+            var v = get(el.dataset.cfgText);
+            if (v) el.textContent = el.dataset.fmt === "phone" ? fmtPhone(v) : v;
+        });
+        document.querySelectorAll("[data-cfg-href]").forEach(function (el) {
+            var v = get(el.dataset.cfgHref);
+            if (v) el.href = v;
+        });
+        document.querySelectorAll("[data-cfg-mail]").forEach(function (el) {
+            var v = get(el.dataset.cfgMail);
+            if (v) el.href = "mailto:" + v;
+        });
+        // Teléfonos: los marcados usan su dato; el resto de botones "Llamar" usan el número de WhatsApp.
+        document.querySelectorAll('a[href^="tel:"]').forEach(function (el) {
+            var v = el.dataset.cfgTel ? get(el.dataset.cfgTel) : WA.numero;
+            if (v) el.href = "tel:+57" + String(v).replace(/^\+?57/, "");
+        });
+        // Enlaces de WhatsApp: número desde config; mensaje desde config si el botón lo indica.
+        document.querySelectorAll('a[href*="wa.me/"]').forEach(function (el) {
+            var url = el.href.replace(/wa\.me\/\d+/, "wa.me/" + WA.completo);
+            var key = el.dataset.waMsg;
+            if (key && WA[key]) url = url.split("?")[0] + "?text=" + encodeURIComponent(WA[key]);
+            el.href = url;
+        });
+    }
+
+    /* ── Google Ads: conversión al hacer clic en WhatsApp ──────── */
+    function initGoogleAds() {
+        var ads = CFG.googleAds;
+        if (!ads || !ads.sendTo) return;
+        var tagId = ads.sendTo.split("/")[0];
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+        window.gtag("js", new Date());
+        window.gtag("config", tagId);
+        // La librería se carga cuando el navegador está libre, para no frenar la página.
+        // Los clics anteriores quedan en cola en dataLayer y se envían al cargar.
+        function load() {
+            var s = document.createElement("script");
+            s.async = true;
+            s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(tagId);
+            document.head.appendChild(s);
+        }
+        if ("requestIdleCallback" in window) requestIdleCallback(load, { timeout: 3000 });
+        else setTimeout(load, 1500);
+
+        document.addEventListener("click", function (e) {
+            var a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
+            if (!a) return;
+            window.gtag("event", "conversion", {
+                send_to: ads.sendTo,
+                value: ads.value,
+                currency: ads.currency,
+                transport_type: "beacon"
+            });
+        });
+    }
 
     /* ── Botón flotante de WhatsApp ─────────────────────────────── */
     function renderWhatsApp() {
         var a = document.createElement("a");
         a.className = "wa-fab";
-        a.href = "https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(WA_MSG);
+        a.href = "https://wa.me/" + WA.completo + "?text=" + encodeURIComponent(WA.msgInfo || "");
         a.target = "_blank";
         a.rel = "noopener";
         a.setAttribute("aria-label", "Escribir por WhatsApp");
@@ -260,7 +327,9 @@
         }).catch(function () {});
     }
 
+    applyConfig();
     renderWhatsApp();
+    initGoogleAds();
     initNav();
     initStars();
     initReveal();
