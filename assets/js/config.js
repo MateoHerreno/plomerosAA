@@ -17,7 +17,7 @@ window.SITE_CONFIG = {
     // ─── Google Ads ───────────────────────────────────────────────────
     // Etiqueta de conversión "Contacto" (se dispara solo en los botones de WhatsApp)
     googleAds: {
-        activarTrackeo: true,           // true = medir clics en WhatsApp · false = sin Google Ads en el sitio
+        activarTrackeo: true,           // true = ofrecer medición con consentimiento · false = sin Google Ads en el sitio
         sendTo: "AW-18186842502/wlSnCIrOvPscEIbjlOBD",
         value: 1.0,
         currency: "COP",
@@ -33,15 +33,28 @@ window.SITE_CONFIG = {
 
     // ─── Contacto (footer) ────────────────────────────────────────────
     contacto: {
-        telefono:  "3148137618",
+        telefono:  "3022274397",
         email:     "davidjuanurrego@gmail.com",
         direccion: "Cra 44 #20 28, El Poblado, Medellín, Antioquia",
+    },
+
+    // ─── Visita diagnóstica ─────────────────────────────────────────
+    visita: {
+        titulo: "¿Qué incluye la visita diagnóstica?",
+        resumen: "Revisamos el problema, ubicamos la causa y te entregamos un presupuesto antes de comenzar.",
+        precio: "$30.000",
+        incluye: [
+            "Inspección visual del área afectada",
+            "Diagnóstico de la causa y recomendaciones",
+            "Presupuesto claro antes de iniciar",
+            "Descuento del valor de la visita si realizamos el trabajo",
+        ],
     },
 
     // ─── Redes sociales (iconos superiores y footer) ──────────────────
     redes: {
         facebook:  "https://www.facebook.com/profile.php?id=61568816871985",
         instagram: "https://www.instagram.com/plome_romedellin?igsh=MThpMDJuYzloNTF",
-        tiktok:    "http://tiktok.com/@juanurrego91?_r=1&_t=ZS-96OVMl4mVFM",
+        tiktok:    "https://www.tiktok.com/@juanurrego91",
     },
 };

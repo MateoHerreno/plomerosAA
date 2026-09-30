@@ -227,6 +227,8 @@ ul, ol { padding-left: 1.2em; }
 
 /* ---------- Marquee de zonas ---------- */
 .marquee { overflow: hidden; border-block: 1px solid var(--line); background: rgba(3, 8, 24, 0.4); -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+#main:has(> .marquee) { display: flex; flex-direction: column; }
+#main:has(> .marquee) > .marquee { order: -1; }
 .marquee__track { display: flex; width: max-content; gap: 36px; padding-block: 16px; animation: marquee 50s linear infinite; }
 .marquee__track span { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 500; white-space: nowrap; }
 .marquee__track .i { color: var(--accent); }
@@ -256,6 +258,12 @@ ul, ol { padding-left: 1.2em; }
 /* ---------- Paneles expandibles ---------- */
 .panels { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; scrollbar-width: none; }
 .panels::-webkit-scrollbar { display: none; }
+@media (max-width: 899px) {
+  .panels { padding-bottom: 12px; scrollbar-width: thin; scrollbar-color: var(--accent) var(--line); touch-action: pan-x; }
+  .panels::-webkit-scrollbar { display: block; height: 7px; }
+  .panels::-webkit-scrollbar-track { background: var(--line); border-radius: 4px; }
+  .panels::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+}
 .panel { position: relative; margin: 0; flex: 0 0 82%; height: 360px; border-radius: var(--radius); overflow: hidden; scroll-snap-align: center; border: 1px solid var(--line); cursor: pointer; }
 .panel picture, .panel img { width: 100%; height: 100%; }
 .panel img { object-fit: cover; transition: transform 0.8s ease; }
@@ -327,6 +335,14 @@ ul, ol { padding-left: 1.2em; }
 .faq__item[open] summary .i { transform: rotate(180deg); }
 .faq__a { padding: 0 20px 18px; color: var(--muted); }
 .faq__a p { margin: 0; }
+.visit-brief { border: 1px solid var(--line-2); border-radius: var(--radius); background: var(--surface); }
+.visit-brief summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; color: var(--text); font-weight: 700; cursor: pointer; list-style: none; }
+.visit-brief summary::-webkit-details-marker { display: none; }
+.visit-brief summary .i { color: var(--accent); transition: transform 0.25s ease; }
+.visit-brief[open] summary .i { transform: rotate(180deg); }
+.visit-brief__body { padding: 0 20px 20px; color: var(--muted); }
+.visit-brief__body p { margin-bottom: 10px; }
+.visit-brief__body ul { margin: 0; }
 
 /* ---------- CTA ---------- */
 .cta-band {
@@ -457,6 +473,10 @@ ul, ol { padding-left: 1.2em; }
 .wa-fab:hover { color: #fff; transform: scale(1.08); }
 .wa-fab .i { width: 32px; height: 32px; }
 .wa-fab::before { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 2px solid var(--wa); animation: ring 2.4s ease-out infinite; }
+.cookie-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 90; display: flex; align-items: center; justify-content: space-between; gap: 20px; max-width: 760px; margin-inline: auto; padding: 16px 18px; border: 1px solid var(--line-2); border-radius: var(--radius-sm); background: rgba(5, 13, 36, 0.96); box-shadow: var(--shadow); }
+.cookie-banner p { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.4; }
+.cookie-banner__actions { display: flex; flex: none; gap: 8px; }
+@media (max-width: 639px) { .cookie-banner { display: block; } .cookie-banner__actions { margin-top: 12px; } .cookie-banner__actions .btn { flex: 1; } }
 @keyframes ring { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.6); opacity: 0; } }
 @keyframes pop { from { transform: scale(0); } }
 @media (min-width: 768px) { .wa-fab { right: 24px; bottom: 24px; width: 64px; height: 64px; } }
@@ -477,11 +497,12 @@ ul, ol { padding-left: 1.2em; }
 .lightbox__next { right: 12px; }
 
 /* ---------- Animación de aparición ---------- */
-.js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.js .reveal.is-visible { opacity: 1; transform: none; }
+/* main.js solo oculta lo que está fuera de pantalla: sin JS todo se ve normal. */
+.reveal-pending { opacity: 0; transform: translateY(28px); }
+.reveal-pending.is-visible { opacity: 1; transform: none; transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
-  .js .reveal { opacity: 1; transform: none; }
+  .reveal-pending { opacity: 1; transform: none; }
 }

@@ -9,6 +9,7 @@
 
     var CFG = window.SITE_CONFIG || {};
     var WA = CFG.whatsapp || { completo: "573022274397", msgInfo: "Hola, quiero más información" };
+    var PHONE = (CFG.contacto && CFG.contacto.telefono) || WA.numero;
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     /* ── Datos de config.js → HTML ──────────────────────────────── */
@@ -32,10 +33,23 @@
             var v = get(el.dataset.cfgMail);
             if (v) el.href = "mailto:" + v;
         });
+        document.querySelectorAll("[data-cfg-list]").forEach(function (el) {
+            var values = get(el.dataset.cfgList);
+            if (!Array.isArray(values)) return;
+            el.replaceChildren.apply(el, values.map(function (value) {
+                var item = document.createElement("li");
+                item.textContent = value;
+                return item;
+            }));
+        });
         // Teléfonos: los marcados usan su dato; el resto de botones "Llamar" usan el número de WhatsApp.
         document.querySelectorAll('a[href^="tel:"]').forEach(function (el) {
-            var v = el.dataset.cfgTel ? get(el.dataset.cfgTel) : WA.numero;
-            if (v) el.href = "tel:+57" + String(v).replace(/^\+?57/, "");
+            var v = el.dataset.cfgTel ? get(el.dataset.cfgTel) : PHONE;
+            if (v) {
+                el.href = "tel:+57" + String(v).replace(/^\+?57/, "");
+                var phoneText = el.querySelector('[data-cfg-text="whatsapp.numero"]');
+                if (phoneText && !el.href.includes("wa.me")) phoneText.textContent = fmtPhone(v);
+            }
         });
         // Enlaces de WhatsApp: número desde config; mensaje desde config si el botón lo indica.
         document.querySelectorAll('a[href*="wa.me/"]').forEach(function (el) {
@@ -49,33 +63,39 @@
     /* ── Google Ads: conversión al hacer clic en WhatsApp ──────── */
     function initGoogleAds() {
         var ads = CFG.googleAds;
-        // Con activarTrackeo: false no se carga ningún script de Google.
         if (!ads || ads.activarTrackeo !== true || !ads.sendTo) return;
         var tagId = ads.sendTo.split("/")[0];
-        window.dataLayer = window.dataLayer || [];
-        window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
-        window.gtag("js", new Date());
-        window.gtag("config", tagId);
-        // La librería se carga cuando el navegador está libre, para no frenar la página.
-        // Los clics anteriores quedan en cola en dataLayer y se envían al cargar.
         function load() {
+            if (window.__adsLoaded) return;
+            window.__adsLoaded = true;
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+            window.gtag("js", new Date());
+            window.gtag("config", tagId);
             var s = document.createElement("script");
             s.async = true;
             s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(tagId);
             document.head.appendChild(s);
         }
-        if ("requestIdleCallback" in window) requestIdleCallback(load, { timeout: 3000 });
-        else setTimeout(load, 1500);
-
+        if (localStorage.getItem("plomeros_cookie_consent") === "accepted") load();
+        else if (!localStorage.getItem("plomeros_cookie_consent")) {
+            var banner = document.createElement("aside");
+            banner.className = "cookie-banner";
+            banner.setAttribute("aria-label", "Preferencias de cookies");
+            banner.innerHTML = '<div><strong>Cookies de medición</strong><p>Usamos cookies de Google Ads para saber cuándo una persona nos contacta por WhatsApp. Puedes aceptar o rechazar.</p></div><div class="cookie-banner__actions"><button type="button" class="btn btn--ghost" data-cookie="reject">Rechazar</button><button type="button" class="btn btn--primary" data-cookie="accept">Aceptar</button></div>';
+            document.body.appendChild(banner);
+            banner.addEventListener("click", function (e) {
+                var action = e.target.closest("[data-cookie]");
+                if (!action) return;
+                localStorage.setItem("plomeros_cookie_consent", action.dataset.cookie === "accept" ? "accepted" : "rejected");
+                if (action.dataset.cookie === "accept") load();
+                banner.remove();
+            });
+        }
         document.addEventListener("click", function (e) {
             var a = e.target.closest && e.target.closest('a[href*="wa.me/"]');
-            if (!a) return;
-            window.gtag("event", "conversion", {
-                send_to: ads.sendTo,
-                value: ads.value,
-                currency: ads.currency,
-                transport_type: "beacon"
-            });
+            if (!a || !window.__adsLoaded) return;
+            window.gtag("event", "conversion", { send_to: ads.sendTo, value: ads.value, currency: ads.currency, transport_type: "beacon" });
         });
     }
 
@@ -219,11 +239,13 @@
 
     /* ── Animación de aparición ─────────────────────────────────── */
     function initReveal() {
-        var els = document.querySelectorAll(".reveal");
-        if (!("IntersectionObserver" in window) || reduceMotion) {
-            els.forEach(function (el) { el.classList.add("is-visible"); });
-            return;
-        }
+        if (!("IntersectionObserver" in window) || reduceMotion) return;
+        // Solo se animan los elementos que aún no están en pantalla.
+        var vh = window.innerHeight;
+        var els = Array.prototype.filter.call(document.querySelectorAll(".reveal"), function (el) {
+            return el.getBoundingClientRect().top > vh;
+        });
+        els.forEach(function (el) { el.classList.add("reveal-pending"); });
         var io = new IntersectionObserver(function (entries) {
             entries.forEach(function (e) {
                 if (!e.isIntersecting) return;
