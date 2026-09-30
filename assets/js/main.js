@@ -49,7 +49,8 @@
     /* ── Google Ads: conversión al hacer clic en WhatsApp ──────── */
     function initGoogleAds() {
         var ads = CFG.googleAds;
-        if (!ads || !ads.sendTo) return;
+        // Con activarTrackeo: false no se carga ningún script de Google.
+        if (!ads || ads.activarTrackeo !== true || !ads.sendTo) return;
         var tagId = ads.sendTo.split("/")[0];
         window.dataLayer = window.dataLayer || [];
         window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };

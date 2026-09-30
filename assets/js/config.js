@@ -11,13 +11,13 @@
  *   redes     → iconos de redes sociales (barra superior y footer)
  *
  * Los mensajes se escriben normales, sin codificar (%20, etc.).
- * Para desactivar Google Ads deja  sendTo: ""
  */
 window.SITE_CONFIG = {
 
     // ─── Google Ads ───────────────────────────────────────────────────
     // Etiqueta de conversión "Contacto" (se dispara solo en los botones de WhatsApp)
     googleAds: {
+        activarTrackeo: true,           // true = medir clics en WhatsApp · false = sin Google Ads en el sitio
         sendTo: "AW-18186842502/wlSnCIrOvPscEIbjlOBD",
         value: 1.0,
         currency: "COP",
