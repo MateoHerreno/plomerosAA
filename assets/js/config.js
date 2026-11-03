@@ -35,7 +35,7 @@ window.SITE_CONFIG = {
     contacto: {
         telefono:  "3147534876",
         email:     "H2oplomero@gmail.com",
-        direccion: "Cra 44 #20 28, El Poblado, Medellín, Antioquia",
+        direccion: "Cra 38 #54-6, Boston, Medellín, Antioquia",
     },
 
     // ─── Visita diagnóstica ─────────────────────────────────────────
