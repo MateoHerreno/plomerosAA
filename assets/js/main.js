@@ -1,5 +1,5 @@
 /**
- * Plomeros Medellín — interacciones del sitio.
+ * Plomeros H2O — interacciones del sitio.
  * Todo el contenido está en el HTML; este archivo añade:
  * datos de config.js, botón flotante de WhatsApp con conversión de Google Ads,
  * menú móvil, fondo de estrellas, animaciones, paneles, mapa diferido y visor de fotos.
@@ -8,7 +8,7 @@
     "use strict";
 
     var CFG = window.SITE_CONFIG || {};
-    var WA = CFG.whatsapp || { completo: "573022274397", msgInfo: "Hola, quiero más información" };
+    var WA = CFG.whatsapp || { completo: "573147534876", msgInfo: "Hola, quiero más información" };
     var PHONE = (CFG.contacto && CFG.contacto.telefono) || WA.numero;
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -77,8 +77,12 @@
             s.src = "https://www.googletagmanager.com/gtag/js?id=" + encodeURIComponent(tagId);
             document.head.appendChild(s);
         }
-        if (localStorage.getItem("plomeros_cookie_consent") === "accepted") load();
-        else if (!localStorage.getItem("plomeros_cookie_consent")) {
+        // localStorage lanza error si el navegador bloquea el almacenamiento; sin esto se cae el resto del sitio.
+        var store = { get: function () { try { return localStorage.getItem("plomeros_cookie_consent"); } catch (e) { return null; } },
+                      set: function (v) { try { localStorage.setItem("plomeros_cookie_consent", v); } catch (e) {} } };
+        var consent = store.get();
+        if (consent === "accepted") load();
+        else if (!consent) {
             var banner = document.createElement("aside");
             banner.className = "cookie-banner";
             banner.setAttribute("aria-label", "Preferencias de cookies");
@@ -87,7 +91,7 @@
             banner.addEventListener("click", function (e) {
                 var action = e.target.closest("[data-cookie]");
                 if (!action) return;
-                localStorage.setItem("plomeros_cookie_consent", action.dataset.cookie === "accept" ? "accepted" : "rejected");
+                store.set(action.dataset.cookie === "accept" ? "accepted" : "rejected");
                 if (action.dataset.cookie === "accept") load();
                 banner.remove();
             });

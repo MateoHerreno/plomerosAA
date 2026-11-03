@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 32 456 456" role="img" aria-labelledby="title">
+  <title id="title">Plomeros H2O</title>
+  <path d="M36 222 249 46v216H72v-40Z" fill="#2ea3dc"/>
+  <path d="M476 222 263 46v216h177v-40Z" fill="#f2a71b"/>
+  <path d="M72 276h177v196H72z" fill="#3fa649"/>
+  <path d="M263 276h177v196H263z" fill="#e2332b"/>
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="10">
+    <path transform="translate(118 128) scale(5)" stroke-width="2" d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    <path d="M318 127c12 16 30 34 30 51a30 30 0 0 1-60 0c0-17 18-35 30-51Z"/>
+    <path d="M380 176c7 9 18 19 18 29a18 18 0 0 1-36 0c0-10 11-20 18-29Z"/>
+    <path d="M345 209c6 8 14 15 14 23a14 14 0 0 1-28 0c0-8 8-15 14-23Z"/>
+    <ellipse cx="351" cy="330" rx="38" ry="44"/>
+    <ellipse cx="351" cy="392" rx="56" ry="20"/>
+    <path d="M295 392c0 33 25 48 40 53l-3 17h38l-3-17c15-5 40-20 40-53"/>
+  </g>
+  <g fill="#fff">
+    <path d="M92 322h86a42 42 0 0 1 42 42v20h-28v-16a14 14 0 0 0-14-14H92Z"/>
+    <rect x="80" y="314" width="16" height="48" rx="4"/>
+    <rect x="150" y="298" width="16" height="26"/>
+    <rect x="128" y="290" width="60" height="14" rx="7"/>
+    <path d="M206 398c8 10 18 19 18 29a18 18 0 0 1-36 0c0-10 10-19 18-29Z"/>
+  </g>
+</svg>

@@ -1,6 +1,6 @@
 /**
  * ╔══════════════════════════════════════════════════════════════════╗
- * ║        CONFIGURACIÓN CENTRAL — Plomeros Medellín                  ║
+ * ║        CONFIGURACIÓN CENTRAL — Plomeros H2O                  ║
  * ║  Cambia los datos aquí y se actualizan en toda la página         ║
  * ╚══════════════════════════════════════════════════════════════════╝
  *
@@ -25,16 +25,16 @@ window.SITE_CONFIG = {
 
     // ─── WhatsApp ─────────────────────────────────────────────────────
     whatsapp: {
-        numero: "3022274397",           // Número sin código de país
-        completo: "573022274397",       // Con código Colombia (+57)
+        numero: "3147534876",           // Número sin código de país
+        completo: "573147534876",       // Con código Colombia (+57)
         msgEmergencia: "Hola, tengo una emergencia de plomería",
         msgInfo:       "Hola, quiero más información",
     },
 
     // ─── Contacto (footer) ────────────────────────────────────────────
     contacto: {
-        telefono:  "3022274397",
-        email:     "davidjuanurrego@gmail.com",
+        telefono:  "3147534876",
+        email:     "H2oplomero@gmail.com",
         direccion: "Cra 44 #20 28, El Poblado, Medellín, Antioquia",
     },
 
@@ -53,8 +53,7 @@ window.SITE_CONFIG = {
 
     // ─── Redes sociales (iconos superiores y footer) ──────────────────
     redes: {
-        facebook:  "https://www.facebook.com/profile.php?id=61568816871985",
-        instagram: "https://www.instagram.com/plome_romedellin?igsh=MThpMDJuYzloNTF",
-        tiktok:    "https://www.tiktok.com/@juanurrego91",
+        facebook:  "https://www.facebook.com/share/1CEDvmnVtj/",
+        instagram: "https://www.instagram.com/plomerosh20",
     },
 };
